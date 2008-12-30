@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'Mainwindow.ui'
 **
-** Created: Mon Dec 29 23:39:39 2008
+** Created: Tue Dec 30 15:26:30 2008
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -46,7 +46,7 @@ public:
     QAction *actionProjectOpen;
     QAction *actionProjectNew;
     QAction *actionProjectSave;
-    QAction *actionProjectSave_As;
+    QAction *actionProjectSaveAs;
     QAction *actionProjectClose;
     QAction *actionFileSaveAs;
     QAction *actionFileNew;
@@ -125,8 +125,8 @@ public:
     actionProjectNew->setObjectName(QString::fromUtf8("actionProjectNew"));
     actionProjectSave = new QAction(Mainwindow);
     actionProjectSave->setObjectName(QString::fromUtf8("actionProjectSave"));
-    actionProjectSave_As = new QAction(Mainwindow);
-    actionProjectSave_As->setObjectName(QString::fromUtf8("actionProjectSave_As"));
+    actionProjectSaveAs = new QAction(Mainwindow);
+    actionProjectSaveAs->setObjectName(QString::fromUtf8("actionProjectSaveAs"));
     actionProjectClose = new QAction(Mainwindow);
     actionProjectClose->setObjectName(QString::fromUtf8("actionProjectClose"));
     actionFileSaveAs = new QAction(Mainwindow);
@@ -171,7 +171,7 @@ public:
     Mainwindow->setCentralWidget(centralwidget);
     menubar = new QMenuBar(Mainwindow);
     menubar->setObjectName(QString::fromUtf8("menubar"));
-    menubar->setGeometry(QRect(0, 0, 713, 21));
+    menubar->setGeometry(QRect(0, 0, 713, 24));
     menuProjekt = new QMenu(menubar);
     menuProjekt->setObjectName(QString::fromUtf8("menuProjekt"));
     menuDatei = new QMenu(menubar);
@@ -209,7 +209,7 @@ public:
     menubar->addAction(menuHelp->menuAction());
     menuProjekt->addAction(actionProjectNew);
     menuProjekt->addAction(actionProjectOpen);
-    menuProjekt->addAction(actionProjectSave_As);
+    menuProjekt->addAction(actionProjectSaveAs);
     menuProjekt->addAction(actionProjectSave);
     menuProjekt->addAction(actionProjectClose);
     menuProjekt->addSeparator();
@@ -274,7 +274,7 @@ public:
     actionProjectOpen->setText(QApplication::translate("Mainwindow", "Open...", 0, QApplication::UnicodeUTF8));
     actionProjectNew->setText(QApplication::translate("Mainwindow", "New", 0, QApplication::UnicodeUTF8));
     actionProjectSave->setText(QApplication::translate("Mainwindow", "Save", 0, QApplication::UnicodeUTF8));
-    actionProjectSave_As->setText(QApplication::translate("Mainwindow", "Save As...", 0, QApplication::UnicodeUTF8));
+    actionProjectSaveAs->setText(QApplication::translate("Mainwindow", "Save As...", 0, QApplication::UnicodeUTF8));
     actionProjectClose->setText(QApplication::translate("Mainwindow", "Close", 0, QApplication::UnicodeUTF8));
     actionFileSaveAs->setText(QApplication::translate("Mainwindow", "Save As...", 0, QApplication::UnicodeUTF8));
     actionFileNew->setText(QApplication::translate("Mainwindow", "New", 0, QApplication::UnicodeUTF8));

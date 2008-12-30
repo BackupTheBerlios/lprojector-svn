@@ -154,7 +154,6 @@ QByteArray Project::toXml() {
 void Project::toXml(QIODevice* buffer) {
     QXmlStreamWriter xml(buffer);
     xml.setAutoFormatting(true);
-    xml.setCodec("UTF-8");//not necessary, only to make it clear.
 
     xml.writeStartDocument();
     xml.writeStartElement("LProject");

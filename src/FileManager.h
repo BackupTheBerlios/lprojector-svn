@@ -39,19 +39,34 @@ class FileManager : public QObject {
 
     ///Regarding Projects
     public:
+        ///Create a project but do not save it.
         Project* newProject(const QString& name, const QString& rootPath, QString* error=0);
+        ///Open a project from a file.
         Project* openProject(QString filename, QString* error=0);
+        ///Save a project to its current filename.
+        bool saveProject(Project* project, QString* error=0);
+        ///Save a project to the specified file.
         bool saveProject(Project* project, QString filename, QString* error=0);
+        ///Close a project without saving.
         void closeProject(Project* project);
+        ///Determine if the project with the specified filename is allready open.
         bool isProjectOpen(const QString& filename) const;
+        ///The list of projects.
         const QList<Project*>& projects() const;
+        ///Determine the index of the specified project.
         int indexOfProject(const Project* project) const;
+        ///Number of opened projects.
         int projectCount() const;
+        ///Currently active project.
         Project* activeProject() const;
+        ///Activate the specified project.
         void activateProject(Project* project);
     signals:
+        ///Emitted when a project is about to be closed.
         void aboutToCloseProject(Project* project);
+        ///Emitted after a project has been opened.
         void projectOpened(Project* project);
+        ///Emitted whenever the active project changes.
         void activeProjectChanged(Project* project);
 
     private:

@@ -46,6 +46,7 @@ class Mainwindow : public QMainWindow, private Ui::Mainwindow {
         void projectSaveAs();
         void projectSave();
         void projectClose();
+        void projectAddFile();
         void projectAddCurrentFile();
 
     protected slots:

@@ -38,7 +38,8 @@ Mainwindow::Mainwindow(QWidget* parent) : QMainWindow(parent) {
     QDockWidget* dock = new QDockWidget(this);
     dock->setWidget(view);
     addDockWidget(Qt::LeftDockWidgetArea, dock);
-    connect(ApplicationManager::fileManager(),SIGNAL(projectOpened(Project*)),view,SLOT(reset()));
+//     connect(ApplicationManager::fileManager(),SIGNAL(projectOpened(Project*)),view,SLOT(reset()));
+    connect(ApplicationManager::fileManager(),SIGNAL(activeProjectChanged(Project*)),view,SLOT(reset()));
 
     setupActions();
     updateActionStates();
@@ -54,10 +55,10 @@ void Mainwindow::setupActions() {
     // Project Menu
     connect(actionProjectNew,SIGNAL(triggered(bool)), this, SLOT(projectNew()));
     connect(actionProjectOpen,SIGNAL(triggered(bool)), this, SLOT(projectOpen()));
-//    connect(actionProjectSaveAs,SIGNAL(triggered(bool)), this, SLOT(projectSaveAs()));
+   connect(actionProjectSaveAs,SIGNAL(triggered(bool)), this, SLOT(projectSaveAs()));
     connect(actionProjectSave,SIGNAL(triggered(bool)), this, SLOT(projectSave()));
-//    connect(actionProjectClose,SIGNAL(triggered(bool)), this, SLOT(projectClose()));
-//    connect(actionProjectAddFile,SIGNAL(triggered(bool)), this, SLOT(projectClose()));
+   connect(actionProjectClose,SIGNAL(triggered(bool)), this, SLOT(projectClose()));
+   connect(actionProjectAddFile,SIGNAL(triggered(bool)), this, SLOT(projectAddFile()));
     connect(actionProjectAddCurrentFile,SIGNAL(triggered(bool)), this, SLOT(projectAddCurrentFile()));
     // File Menu
     connect(actionFileNew,SIGNAL(triggered(bool)), this, SLOT(fileNew()));

@@ -7,49 +7,48 @@
 #include "Document.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QFileDialog>
 #include <QDebug>
 
 void Mainwindow::projectNew() {
-//    Project* p = new Project("Testprojekt", "D:\\test\\");
-////    Project* p = new Project("Testprojekt", "D:\\programmierung\\");
-//    p->addFile("D:\\programmierung\\aktuell\\LWE\\LWE\\debug\\DocumentIO.o");
-//    p->addFile("D:\\programmierung\\aktuell\\LWE\\LWE\\debug\\test.exe");
-//    p->addFile("D:\\programmierung\\aktuell\\LWE\\LWE\\debug\\ulk");
-//    p->addFile("D:\\programmierung\\aktuell\\LWE\\LWE");
-//    p->addFile("D:\\programmierung\\aktuell\\LWE\\LWE\\release\\Highlighter.o");
-////    p->addFile("D:\\programmierung");
-//    syslog.send("Mainwindow: New Project created.",Logger::Informative);
-//    m_projects << p;
-
-//    QFile file("test/test.proj");
-//    if(!file.open(QIODevice::ReadOnly)) {
-//        qDebug() << "Unable to open project file";
-//        return;
-//    }
-//    Project* p = Project::fromXml(&file, ".");
-//    file.close();
-//    if(p != 0)
-//        m_projects << p;
-//    Q_ASSERT(p != 0);
+    qDebug() << "Mainwindow::projectNew()";
+    
+    //Assert valid filename
+    QString path = QFileDialog::getSaveFileName(this,tr("Choose new a project's filename"), 
+                                                QString(), tr("LP Project (*.lproj)"));
+    if(path.isEmpty())
+        return;
+    QFileInfo fi(path);
+    if(!fi.dir().exists())
+        return;
+    //Try to create project
     QString error;
     Project* p;
-    p = ApplicationManager::fileManager()->newProject(
-        "D:\\programmierung\\aktuell\\LWE\\LWE\\test","test2.proj",&error);
+    p = ApplicationManager::fileManager()->newProject(fi.fileName(), fi.absolutePath(), &error);
     if(!p){
         syslog.send(error,Logger::Warning);
         return;
     }
+    //Save project file
+    if(!ApplicationManager::fileManager()->saveProject(p, &error)){
+        ApplicationManager::fileManager()->closeProject(p);
+        syslog.send(error,Logger::Warning);
+        return;
+    }
+    //Make the new project active and return
     ApplicationManager::fileManager()->activateProject(p);
     syslog.send(tr("Created new project."),Logger::Medium);
 }
 void Mainwindow::projectOpen() {
-
-    // Asking for a filename
+    qDebug() << "Mainwindow::projectOpen()";
+    
+    //Asking for a filename
     QString filename = QFileDialog::getOpenFileName(this, tr("Open Project"),
-                            "", tr("LWE Project (*.proj *.lwe)"));
+                            "", tr("LP Project (*.lproj)"));
     if(filename.isEmpty())
         return;
+    //Open project
     QString error;
     Project* p;
     p = ApplicationManager::fileManager()->openProject(filename,&error);
@@ -57,19 +56,29 @@ void Mainwindow::projectOpen() {
         syslog.send(error,Logger::Warning);
         return;
     }
+    //Make the opened project active and return
     ApplicationManager::fileManager()->activateProject(p);
     syslog.send(tr("Project successfully opened."),Logger::Medium);
 }
 
 void Mainwindow::projectSaveAs() {
     qDebug() << "Mainwindow::projectSaveAs() is not yet implemented!";
+    
+    //Get current project
     Project* project = ApplicationManager::fileManager()->activeProject();
     if(!project)
         return;
-    QString path = QFileDialog::getSaveFileName(this,tr("Save Project"),project->filename());
+        
+    //Get valid filename
+    QString path = QFileDialog::getSaveFileName(this,tr("Save Project"),project->name(),
+                                                tr("LP Project (*.lproj)"));
     if(path.isEmpty())
         return;
-    qDebug() << "Project save path: " << path;
+    QFileInfo fi(path);
+    if(!fi.dir().exists())
+        return;
+        
+    //Save project file
     QString error;
     if(!ApplicationManager::fileManager()->saveProject(project, path, &error))
         syslog.send(error, Logger::Warning);
@@ -92,15 +101,25 @@ void Mainwindow::projectSave() {
 }
 
 void Mainwindow::projectClose() {
-    qDebug() << "Mainwindow::projectClose() is not yet implemented!";
+    qDebug() << "Mainwindow::projectClose()";
+    
     Project* project = ApplicationManager::fileManager()->activeProject();
     if(!project)
         return;
+    //TODO: Add confirmation and saving
     ApplicationManager::fileManager()->closeProject(project);
     syslog.send(tr("Project closed."),Logger::Medium);
 }
 
+void Mainwindow::projectAddFile() {
+    qDebug() << "Mainwindow::projectAddFile()";
+    
+    //TODO: Implements
+}
+
 void Mainwindow::projectAddCurrentFile() {
+    qDebug() << "Mainwindow::projectAddCurrentFile()";
+    
     Document* doc = ApplicationManager::fileManager()->activeDocument();
     Project* project = ApplicationManager::fileManager()->activeProject();
     if(doc && project) {
@@ -109,5 +128,11 @@ void Mainwindow::projectAddCurrentFile() {
             syslog.send(tr("Appended current file to project."),Logger::Medium);
         else
             syslog.send(tr("Unable to append the file to the project."),Logger::Warning);
+    }
+    else if(!doc){
+        syslog.send(tr("No active document."),Logger::Warning);
+    }
+    else if(!project){
+        syslog.send(tr("No active project."),Logger::Warning);
     }
 }

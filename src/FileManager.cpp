@@ -163,7 +163,7 @@ void FileManager::activateDocument(Document* document) {
 
 ///Regarding Projects
 Project* FileManager::newProject(const QString& name, const QString& rootPath, QString* error) {
-    QString filename = cleanPath(name + "/" + rootPath);
+    QString filename = cleanPath(rootPath + "/" + name);
     QFile file(filename);
     if(m_documentMap.contains(filename) || m_projectMap.contains(filename)) {
         if(error)
@@ -233,11 +233,11 @@ Project* FileManager::openProject(QString filename, QString* error) {
     return project;
 }
 
-bool FileManager::saveProject(Project* project, QString filename, QString* error) {
+bool FileManager::saveProject(Project* project, QString* error) {
     Q_ASSERT(project);
 
     //Prepare file
-    filename = cleanPath(filename);
+    QString filename = cleanPath(project->filename());
     QFile file(filename);
     if(!file.open(QIODevice::WriteOnly|QIODevice::Text)) {
         if(error)
@@ -256,6 +256,20 @@ bool FileManager::saveProject(Project* project, QString filename, QString* error
         m_projectMap.insert(filename, project);
     }
     return true;
+}
+
+bool FileManager::saveProject(Project* project, QString filename, QString* error) {
+    Q_ASSERT(project);
+
+    //Set filename if different
+    if(filename != project->filename()) {
+        project->setFilename(filename);
+        m_projectMap.remove(project->filename());
+        m_projectMap.insert(filename, project);
+    }
+    
+    //Save project
+    return saveProject(project, error);
 }
 
 void FileManager::closeProject(Project* project) {

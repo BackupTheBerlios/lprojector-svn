@@ -9,7 +9,6 @@
 #include <QMap>
 #include <QDebug>
 
-#include "ProjectItem.h" //TODO:temporary
 class ProjectItem;
 class QIODevice;
 
