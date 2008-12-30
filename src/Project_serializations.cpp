@@ -8,7 +8,7 @@
 
 class QIODevice;
 
-//xml.writeStartElement("LWEProject");
+//xml.writeStartElement("LProject");
 //    xml.writeAttribute("FileFormatVersion","1");
 //    xml.writeAttribute("ApplicationVersion"version().toString());
 //    xml.writeAttribute("Name", name());
@@ -37,7 +37,7 @@ Project* Project::fromXml(QIODevice* device, const QString& rootPath, QString* e
 //            qDebug() << "xml tag:" << xml.name().toString();
             switch(state) {
                 case SInitial:
-                    if(xml.name() == "LWEProject") {
+                    if(xml.name() == "LProject") {
                         temp = xml.attributes().value("FileFormatVersion").toString();
                         fileFormatVersion = temp.toUInt(&ok);
                         if(temp.isEmpty() || !ok || fileFormatVersion == 0){
@@ -69,9 +69,9 @@ Project* Project::fromXml(QIODevice* device, const QString& rootPath, QString* e
                         projectfound = true;
                     }
                     else {
-                        qDebug() << "Unexpected Tag. LWEProject expected.";
+                        qDebug() << "Unexpected Tag. LProject expected.";
                         if(error)
-                            *error = device->tr("Unexpected Tag. LWEProject expected.");
+                            *error = device->tr("Unexpected Tag. LProject expected.");
                         delete project;
                         return 0;
                     }
@@ -135,9 +135,9 @@ Project* Project::fromXml(QIODevice* device, const QString& rootPath, QString* e
         return 0;
     }
     if(!projectfound){
-        qDebug() << "Invalid Xml file. Expected LWEProject.";
+        qDebug() << "Invalid Xml file. Expected LProject.";
         if(error)
-            *error = device->tr("Invalid Xml file. Expected LWEProject.");
+            *error = device->tr("Invalid Xml file. Expected LProject.");
         delete project;
         return 0;
     }
@@ -157,7 +157,7 @@ void Project::toXml(QIODevice* buffer) {
     xml.setCodec("UTF-8");//not necessary, only to make it clear.
 
     xml.writeStartDocument();
-    xml.writeStartElement("LWEProject");
+    xml.writeStartElement("LProject");
         xml.writeAttribute("FileFormatVersion","1");
         xml.writeAttribute("ApplicationVersion", version().toString());
         xml.writeAttribute("Name", name());
